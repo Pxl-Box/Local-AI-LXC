@@ -95,7 +95,7 @@ echo "Provisioning guest system (this may take a few minutes)..."
 
 pct exec $CTID -- bash -c "
     apt-get update && apt-get upgrade -y
-    apt-get install -y curl git build-essential
+    apt-get install -y curl git build-essential zstd
     
     # Install Node.js
     echo 'Installing Node.js...'

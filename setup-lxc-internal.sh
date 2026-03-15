@@ -11,7 +11,7 @@ echo "==========================================="
 
 # Update System
 apt-get update && apt-get upgrade -y
-apt-get install -y curl git build-essential
+apt-get install -y curl git build-essential zstd
 
 # Install Node.js (LTS)
 echo "Installing Node.js..."
