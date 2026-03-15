@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local AI LXC - Proxmox Intelligence</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <aside>
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            LXC AI
+        </div>
+        
+        <nav>
+            <div class="nav-item active" data-view="chat">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Chat
+            </div>
+            <div class="nav-item" data-view="installer">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>
+                Model Installer
+            </div>
+            <div class="nav-item" data-view="gallery">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Images
+            </div>
+        </nav>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color);">
+            <div class="nav-item" id="refresh-models">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Refresh Engine
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div id="view-title" style="font-weight: 600; color: var(--text-secondary);">Chat Console</div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <label style="font-size: 0.8rem; color: var(--text-secondary);">Model:</label>
+                <select class="model-selector" id="model-select">
+                    <option value="">Loading models...</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Chat View -->
+        <div id="chat-view" class="view-panel active">
+            <div id="chat-container">
+                <div class="message ai">
+                    Hello! I'm your local AI running inside this LXC. How can I assist you today?
+                </div>
+            </div>
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea id="user-input" placeholder="Type a message (Shift+Enter for newline)..." rows="1"></textarea>
+                    <button class="send-btn" id="send-btn">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Installer View -->
+        <div id="installer-view" class="view-panel">
+            <div style="margin-bottom: 24px;">
+                <h2 style="margin-bottom: 10px;">Model Hub</h2>
+                <p style="color: var(--text-secondary);">Install custom AI models directly from the web interface.</p>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+                <input type="text" id="model-name-input" class="model-selector" style="flex: 1;" placeholder="Enter model name (e.g. llama3, mistral, deepseek-coder)">
+                <button class="glass-btn" id="pull-model-btn" style="background: var(--accent-color); border: none;">Pull Model</button>
+            </div>
+
+            <div class="terminal-box" id="terminal-output">
+                System ready. Waiting for input...
+            </div>
+        </div>
+
+        <!-- Gallery View -->
+        <div id="gallery-view" class="view-panel">
+            <div style="margin-bottom: 24px;">
+                <h2 style="margin-bottom: 10px;">Generated Images</h2>
+                <p style="color: var(--text-secondary);">View and manage images generated by your local models.</p>
+            </div>
+            <div class="image-grid" id="image-grid">
+                <!-- Images will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
