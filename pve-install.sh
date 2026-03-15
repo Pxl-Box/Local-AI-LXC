@@ -28,6 +28,8 @@ RAM=8192
 DISK=50
 BRIDGE="vmbr0"
 PASSWORD="localai-passwd-123"
+STORAGE="local-lvm"
+TEMPLATE_STORAGE="local"
 
 if [[ "$MODE" =~ ^[Cc]$ ]]; then
     read -p "Enter Container ID [$CTID]: " input_ctid
@@ -40,6 +42,10 @@ if [[ "$MODE" =~ ^[Cc]$ ]]; then
     RAM=${input_ram:-$RAM}
     read -p "Enter Storage in GB [$DISK]: " input_disk
     DISK=${input_disk:-$DISK}
+    read -p "Enter Storage Pool (rootfs) [$STORAGE]: " input_storage
+    STORAGE=${input_storage:-$STORAGE}
+    read -p "Enter Template Storage (local/local-zfs/etc) [$TEMPLATE_STORAGE]: " input_t_storage
+    TEMPLATE_STORAGE=${input_t_storage:-$TEMPLATE_STORAGE}
     read -p "Enter Bridge [$BRIDGE]: " input_bridge
     BRIDGE=${input_bridge:-$BRIDGE}
     read -s -p "Enter Root Password: " input_pass
@@ -47,19 +53,33 @@ if [[ "$MODE" =~ ^[Cc]$ ]]; then
     PASSWORD=${input_pass:-$PASSWORD}
 fi
 
+# Detect Template
+echo "Looking for Debian templates in $TEMPLATE_STORAGE..."
+TEMPLATES=$(pvesm list $TEMPLATE_STORAGE --content vztmpl | grep -i "debian" | awk '{print $1}' || true)
+
+if [ -z "$TEMPLATES" ]; then
+    echo "Warning: No Debian templates found in $TEMPLATE_STORAGE."
+    read -p "Please enter the full path to your .tar.zst template (e.g. local:vztmpl/debian-12...): " TEMPLATE
+else
+    DEFAULT_TEMPLATE=$(echo "$TEMPLATES" | head -n 1)
+    echo "Found templates:"
+    echo "$TEMPLATES"
+    read -p "Choose template [$DEFAULT_TEMPLATE]: " input_template
+    TEMPLATE=${input_template:-$DEFAULT_TEMPLATE}
+fi
+
 echo -e "\nSummary:\n  ID: $CTID\n  Name: $HOSTNAME\n  Cores: $CORES\n  RAM: $RAM MB\n  Disk: $DISK GB\n"
 read -p "Proceed? (y/n): " CONFIRM
 if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then echo "Aborted."; exit 0; fi
 
 # 3. Container Creation
-echo "Creating container $CTID..."
-# Note: Using Debian 12 template as default
-pct create $CTID local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst \
+echo "Creating container $CTID using $TEMPLATE..."
+pct create $CTID $TEMPLATE \
     --hostname $HOSTNAME \
     --password "$PASSWORD" \
     --net0 name=eth0,bridge=$BRIDGE,ip=dhcp \
-    --storage local-lvm \
-    --rootfs local-lvm:$DISK \
+    --storage $STORAGE \
+    --rootfs $STORAGE:$DISK \
     --cores $CORES \
     --memory $RAM \
     --swap 2048 \
