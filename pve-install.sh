@@ -125,7 +125,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/opt/local-ai-lxc
-ExecStart=/usr/bin/npm start
+ExecStart=/usr/bin/node server.js
 Restart=always
 Environment=PORT=3000
 Environment=OLLAMA_URL=http://localhost:11434
@@ -136,7 +136,10 @@ EOF
 
     systemctl daemon-reload
     systemctl enable local-ai-lxc
-    systemctl start local-ai-lxc
+    systemctl start local-ai-lxc || true
+    
+    echo 'Verifying service status...'
+    systemctl is-active --quiet local-ai-lxc && echo 'Service is running.' || echo 'Warning: Service failed to start automatically.'
 "
 
 echo "=========================================================="
