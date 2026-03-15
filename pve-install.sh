@@ -108,6 +108,7 @@ pct exec $CTID -- bash -c "
     
     # Clone Web UI
     echo 'Cloning Web UI...'
+    rm -rf /opt/local-ai-lxc
     mkdir -p /opt/local-ai-lxc
     cd /opt/local-ai-lxc
     git clone https://github.com/Pxl-Box/Local-AI-LXC.git .

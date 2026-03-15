@@ -24,6 +24,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 # Clone the Repository
 echo "Cloning Web UI from GitHub..."
+rm -rf /opt/local-ai-lxc
 mkdir -p /opt/local-ai-lxc
 cd /opt/local-ai-lxc
 git clone https://github.com/Pxl-Box/Local-AI-LXC.git .
