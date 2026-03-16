@@ -44,7 +44,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/opt/local-ai-lxc
-ExecStart=/usr/bin/npm start
+ExecStart=/usr/bin/node server.js
 Restart=always
 Environment=PORT=3000
 Environment=OLLAMA_URL=http://localhost:11434
