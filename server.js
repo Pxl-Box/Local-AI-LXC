@@ -93,7 +93,7 @@ app.get('/api/images', (req, res) => {
 });
 
 // Serve the frontend for any other route (SPA)
-app.get('(.*)', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
